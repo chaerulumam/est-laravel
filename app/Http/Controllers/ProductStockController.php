@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\APIFormatter;
-use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
-class UserController extends Controller
+class ProductStockController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +14,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user.index', [
-            'user' => User::orderBy('id', 'desc')->get()
-        ]);
+        return Http::get('http://103.23.235.214/kanaldata/Webservice/bank_method');
+
+        // return view('product.index', [
+        //     'data' => $api['data']
+        // ]);
     }
 
     /**
@@ -29,7 +28,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user.create');
+        //
     }
 
     /**
@@ -40,31 +39,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'remember_token' => Str::random(60),
+        $product = Http::post('http://103.23.235.214/kanaldata/Webservice/bank_method', [
+            'bank_account_id' => 1,
         ]);
 
-        return redirect('user')->with('success', 'Data berhasil ditambahkan!');
+        return $product->json();
 
-        $credentials = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email:dns',
-            'password' => 'required'
-        ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return redirect()->intended('/');
-        }
-
-        return back()->with('loginError', 'Login Failed');
     }
-    
 
     /**
      * Display the specified resource.
@@ -85,11 +67,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $data = User::find($id);
-          return view("user.edit", [
-         'user' => $data
-       ]);
-        
+        //
     }
 
     /**
@@ -101,12 +79,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        User::where('id', $id)->update([
-            'name' => $request->name,
-            'email' => $request->email
-        ]);
-
-        return redirect('user')->with('success', 'Berhasil diubah');
+        //
     }
 
     /**
@@ -116,9 +89,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {   
-        User::find($id)->delete();
-
-        return redirect('user');
+    {
+        //
     }
 }
