@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,12 +21,18 @@ use Illuminate\Support\Facades\Route;
 //     return view('app');
 // });
 
+Route::get('/', [DashboardController::class, 'index'])->middleware('auth');
 
-Route::get('login', [LoginController::class, 'index']);
+Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::post('login', [LoginController::class, 'store']);
 Route::get('logout', [LoginController::class, 'logout']);        
 
-Route::get('/', [DashboardController::class, 'index']);
+Route::get('user', [UserController::class, 'index']);
+Route::get('create-user', [UserController::class, 'create']);
+Route::post('create-user', [UserController::class, 'store']);
+Route::get('edit/{id}/user', [UserController::class, 'edit']);
+Route::put('update/{id}', [UserController::class, 'update']);
+Route::delete('delete/{id}', [UserController::class, 'destroy']);
 
 Route::get('register', [RegisterController::class, 'index']);
 Route::post('register', [RegisterController::class, 'create']);

@@ -15,6 +15,22 @@
   <link rel="stylesheet" href="{{asset('adminlte/dist/css/adminlte.min.css')}}">
 </head>
 <body class="hold-transition login-page">
+
+  @if (session()->has('success'))
+          <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+          </div>
+      @endif
+
+      @if (session()->has('loginError'))
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ session('loginError') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+      @endif
+
 <div class="login-box">
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
@@ -23,11 +39,18 @@
     </div>
     <div class="card-body">
 
+      
+
       <form action="login" method="post">
         @csrf
         <div class="input-group mb-3">
-          <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+          <input type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" name="email" id="email" placeholder="Email">
           <div class="input-group-append">
+            @error('email')
+              <div class="invalid-feedback">
+                {{ $message }}  
+              </div>   
+            @enderror
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
@@ -46,6 +69,7 @@
           <div class="col-4">
             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
           </div>
+          <a href="register">Don't have account yet? Register Now</a>
           <!-- /.col -->
         </div>
       </form>

@@ -54,6 +54,7 @@
           </div>
           <!-- /.col -->
         </div>
+        <a href="login">Already have account? Login Now</a>
       </form>
     </div>
     <!-- /.card-body -->

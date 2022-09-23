@@ -14,7 +14,7 @@ class LoginController extends Controller
      */
     public function index()
     {
-        return view('admin.login');
+        return view('admin.login')->with('success');
     }
 
     /**
@@ -35,11 +35,18 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect('/');
+        $credentials = $request->validate([
+            'email' => 'required|email:dns',
+            'password' => 'required'
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return redirect()->intended('/');
         }
 
-        return redirect('login');
+        return back()->with('loginError', 'Login Failed');
     }
 
     /**
