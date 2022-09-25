@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 namespace App\Helpers;
 
-class APIFormatter 
+class APIFormatter
 {
     protected static $response = [
         'status' => null,
@@ -10,12 +10,12 @@ class APIFormatter
         'data' => null
     ];
 
-    public static function createApi($status = null, $message = null, $data = null)
+    public static function createApi($status = null, $message = null, $data = null, $code = 1)
     {
-        self::$response['status'] = $status;
+        self::$response['status'] = $code;
         self::$response['message'] = $message;
         self::$response['data'] = $data;
 
-        return response()->json(self::$response, self::$response['status']);
+        return response()->json(self::$response, $status);
     }
 }

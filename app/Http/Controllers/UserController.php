@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\APIFormatter;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Exceptions\Handler;
 
 class UserController extends Controller
 {
@@ -64,7 +64,7 @@ class UserController extends Controller
 
         return back()->with('loginError', 'Login Failed');
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -86,10 +86,9 @@ class UserController extends Controller
     public function edit($id)
     {
         $data = User::find($id);
-          return view("user.edit", [
-         'user' => $data
-       ]);
-        
+        return view("user.edit", [
+            'user' => $data
+        ]);
     }
 
     /**
@@ -116,9 +115,17 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {   
+    {
+
+        $userIdLoggedIn = Auth::id();
+        $userIdWantsToDelete = $id;
+
+        if ($userIdLoggedIn == $userIdWantsToDelete) {
+            return redirect('user')->with(['error' => 'Anda sedang Login']);
+        }
+
         User::find($id)->delete();
 
-        return redirect('user');
+        return redirect('user')->with(['success' => 'Data berhasil dihapus!']);
     }
 }

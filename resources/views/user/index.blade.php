@@ -19,6 +19,13 @@
                     </button>
                 </div>
             @endif
+
+            @if (session()->has('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+
               <div class="card">
                   <div class="card-header">
                       <h3 class="card-title">User Table</h3>
